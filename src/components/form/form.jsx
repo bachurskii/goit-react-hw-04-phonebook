@@ -1,39 +1,53 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const Form = ({ onAddContact }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+class Form extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      number: '',
+    };
+  }
 
-  const handleSubmit = event => {
+  handleSubmit = event => {
     event.preventDefault();
-    onAddContact(name, number);
-    setName('');
-    setNumber('');
+    const { name, number } = this.state;
+    this.props.onAddContact(name, number);
+    this.setState({ name: '', number: '' });
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        placeholder="name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        required
-      />
-      <input
-        type="tel"
-        name="number"
-        placeholder="Phone number"
-        value={number}
-        onChange={e => setNumber(e.target.value)}
-        required
-      />
-      <button type="submit">Add contact</button>
-    </form>
-  );
-};
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  render() {
+    const { name, number } = this.state;
+
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={name}
+          onChange={this.handleChange}
+          required
+        />
+        <input
+          type="tel"
+          name="number"
+          placeholder="Phone Number"
+          value={number}
+          onChange={this.handleChange}
+          required
+        />
+        <button type="submit">Add Contact</button>
+      </form>
+    );
+  }
+}
 
 Form.propTypes = {
   onAddContact: PropTypes.func.isRequired,
