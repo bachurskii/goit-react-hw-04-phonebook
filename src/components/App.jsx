@@ -5,7 +5,6 @@ import Filter from './filter/filter';
 import Form from './form/form';
 
 const LocalSrtorageContacts = 'contacts';
-
 class App extends Component {
   constructor(props) {
     super(props);
