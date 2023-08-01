@@ -1,54 +1,49 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-class Form extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      number: '',
-    };
-  }
+const Form = ({ onAddContact }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const { name, number } = this.state;
-    this.props.onAddContact(name, number);
-    this.setState({ name: '', number: '' });
+    onAddContact(name, number);
+    setName('');
+    setNumber('');
   };
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'number') {
+      setNumber(value);
+    }
   };
 
-  render() {
-    const { name, number } = this.state;
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        value={name}
+        onChange={handleChange}
+        required
+      />
 
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={name}
-          onChange={this.handleChange}
-          required
-        />
-
-        <input
-          type="tel"
-          name="number"
-          placeholder="Phone Number"
-          value={number}
-          onChange={this.handleChange}
-          required
-        />
-        <button type="submit">Add Contact</button>
-      </form>
-    );
-  }
-}
+      <input
+        type="tel"
+        name="number"
+        placeholder="Phone Number"
+        value={number}
+        onChange={handleChange}
+        required
+      />
+      <button type="submit">Add Contact</button>
+    </form>
+  );
+};
 
 Form.propTypes = {
   onAddContact: PropTypes.func.isRequired,
